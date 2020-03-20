@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.StdOut;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<Item> implements Iterable<Item> {
+public final class Deque<Item> implements Iterable<Item> {
 
     private Node first;
     private Node last;
@@ -25,7 +25,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the front
     public void addFirst(Item item) {
-        if (item == null) throw new IllegalArgumentException("add First with null");
+        if (item == null) {
+            throw new IllegalArgumentException("add First with null");
+        }
         Node newFirst = new Node(item);
         newFirst.next = first;
         first = newFirst;
@@ -40,7 +42,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // add the item to the back
     public void addLast(Item item) {
-        if (item == null) throw new IllegalArgumentException("add Last with null");
+        if (item == null) {
+            throw new IllegalArgumentException("add Last with null");
+        }
         Node newLast = new Node(item);
         newLast.previous = last;
         last = newLast;
@@ -55,7 +59,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the front
     public Item removeFirst() {
-        if (first == null) throw new NoSuchElementException("remove first on a empty deque");
+        if (first == null) {
+            throw new NoSuchElementException("remove first on a empty deque");
+        }
         Node previousFirst = first;
         first = previousFirst.next;
         if (first == null) {
@@ -71,7 +77,9 @@ public class Deque<Item> implements Iterable<Item> {
 
     // remove and return the item from the back
     public Item removeLast() {
-        if (last == null) throw new NoSuchElementException("remove last on a empty deque");
+        if (last == null) {
+            throw new NoSuchElementException("remove last on a empty deque");
+        }
         Node previousLast = last;
         last = previousLast.previous;
         if (last == null) {
@@ -86,41 +94,9 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     // return an iterator over items in order from front to back
+    @Override
     public Iterator<Item> iterator() {
         return new DequeIterator();
-    }
-
-    private class Node {
-        Item value;
-        Node next;
-        Node previous;
-
-        Node(Item value) {
-            this.value = value;
-        }
-    }
-
-    private class DequeIterator implements Iterator<Item> {
-
-        private Node next = first;
-
-        @Override
-        public boolean hasNext() {
-            return next != null;
-        }
-
-        @Override
-        public Item next() {
-            if (!hasNext()) throw new NoSuchElementException("next on when there is no next");
-            Item item = next.value;
-            next = next.next;
-            return item;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("remove is forbidden!");
-        }
     }
 
     // unit testing (required)
@@ -136,5 +112,39 @@ public class Deque<Item> implements Iterable<Item> {
         StdOut.printf("iterator next is %s\n", iterator.next());
         StdOut.printf("Remove first - %s now size %s\n", deque.removeFirst(), deque.size());
         StdOut.printf("Remove last - %s now size %s\n", deque.removeLast(), deque.size());
+    }
+
+    private class Node {
+        private final Item value;
+        private Node next;
+        private Node previous;
+
+        Node(Item nodeValue) {
+            this.value = nodeValue;
+        }
+    }
+
+    private class DequeIterator implements Iterator<Item> {
+
+        private Node next = first;
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public Item next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("next on when there is no next");
+            }
+            Item item = next.value;
+            next = next.next;
+            return item;
+        }
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove is forbidden!");
+        }
     }
 }
